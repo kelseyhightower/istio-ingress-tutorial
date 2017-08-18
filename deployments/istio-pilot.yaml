@@ -1,0 +1,43 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: istio-pilot
+spec:
+  replicas: 1
+  template:
+    metadata:
+      annotations:
+        alpha.istio.io/sidecar: ignore
+      labels:
+        istio: pilot
+    spec:
+      serviceAccountName: istio-pilot
+      containers:
+        - name: discovery
+          image: docker.io/istio/pilot:0.1.6
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+          args:
+            - "discovery"
+            - "-v=2"
+          ports:
+            - name: http-discovery
+              containerPort: 8080
+        - name: apiserver
+          image: docker.io/istio/pilot:0.1.6
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+          args:
+            - "apiserver"
+            - "-v=2"
+          ports:
+            - name: http-apiserver
+              containerPort: 8081

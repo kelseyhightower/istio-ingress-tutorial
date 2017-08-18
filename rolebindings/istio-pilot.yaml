@@ -1,0 +1,11 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: istio-pilot
+subjects:
+  - kind: ServiceAccount
+    name: istio-pilot
+roleRef:
+  kind: ClusterRole
+  name: istio-pilot
+  apiGroup: rbac.authorization.k8s.io

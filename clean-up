@@ -1,0 +1,7 @@
+#!/bin/sh
+
+kubectl delete svc istio-ingress
+echo "Waiting for the Istio Ingress service to clean up"
+sleep 30
+
+gcloud container clusters delete -q istio

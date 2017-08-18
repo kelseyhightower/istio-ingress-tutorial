@@ -1,0 +1,45 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: istio-ingress
+spec:
+  template:
+    metadata:
+      annotations:
+        alpha.istio.io/sidecar: ignore
+      labels:
+        istio: ingress
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: dedicated
+                    operator: In
+                    values:
+                      - istio-ingress
+      tolerations:
+        - key: dedicated
+          operator: "Equal"
+          value: istio-ingress
+          effect: "NoSchedule"
+      serviceAccountName: istio-ingress
+      containers:
+        - name: istio-ingress
+          image: docker.io/istio/proxy_debug:0.1.6
+          env:
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+          args:
+            - "proxy"
+            - "ingress"
+            - "-v=2"
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443

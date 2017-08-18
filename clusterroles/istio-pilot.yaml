@@ -1,0 +1,14 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1beta1
+metadata:
+  name: istio-pilot
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps", "endpoints", "pods", "services"]
+    verbs: ["*"]
+  - apiGroups: ["extensions"]
+    resources: ["thirdpartyresources", "thirdpartyresources.extensions", "ingresses"]
+    verbs: ["*"]
+  - apiGroups: ["istio.io"]
+    resources: ["istioconfigs", "istioconfigs.istio.io"]
+    verbs: ["*"]
