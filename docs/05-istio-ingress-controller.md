@@ -1,5 +1,7 @@
 # Istio Ingress Controller
 
+In this section the Istio Ingress Controller will be deployed to each node in the `istio-ingress-pool` node pool using a DaemonSet. The reason for doing this is to provide dedicated resources to the Istio Ingress Controllers and support the ability to scale the `istio-ingress-pool` node pool independently of the `default` node pool. Using two different node pools also grants the ability to use different machine types for the Ingress Controllers and general workloads. 
+
 ## Provision the Istio Ingress Controller
 
 ### Create the Istio Ingress Service Account and Cluster Role
